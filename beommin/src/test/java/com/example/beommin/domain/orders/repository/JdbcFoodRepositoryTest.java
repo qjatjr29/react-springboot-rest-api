@@ -4,6 +4,9 @@ import com.example.beommin.domain.orders.entity.food.Category;
 import com.example.beommin.domain.orders.entity.food.Food;
 import com.example.beommin.domain.orders.entity.food.chicken.FriedChicken;
 import com.example.beommin.domain.orders.entity.food.chicken.SpicyChicken;
+import com.example.beommin.domain.orders.entity.store.ChickenStore;
+import com.example.beommin.domain.orders.entity.store.Store;
+import com.example.beommin.domain.orders.entity.store.StoreCategory;
 import com.wix.mysql.EmbeddedMysql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.AfterEach;
@@ -23,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,18 +71,24 @@ class JdbcFoodRepositoryTest {
     JdbcFoodRepository foodRepository;
 
     @Autowired
+    StoreRepository storeRepository;
+
+    @Autowired
     DataSource dataSource;
 
     EmbeddedMysql embeddedMysql;
 
+    Store chickenStore;
     Food friedChicken, spicyChicken;
+    static final UUID storeId = UUID.randomUUID();
     static final UUID friedChickenId = UUID.randomUUID();
     static final UUID spicyChickenId = UUID.randomUUID();
 
     @BeforeEach
     void setup() {
-        friedChicken = new FriedChicken(friedChickenId, "황금올리브", 17000, Category.CHICKEN, "정말 맛있습니다.","");
-        spicyChicken = new SpicyChicken(spicyChickenId, "양념황금올리브", 18000, Category.CHICKEN,  "정말 맛있습니다22.", "");
+        chickenStore = new ChickenStore(storeId, "범비큐", "서울시 강남", "010-000-0000", StoreCategory.CHICKEN, "", LocalDate.now());
+        friedChicken = new FriedChicken(friedChickenId, "황금올리브", 17000, Category.CHICKEN, "정말 맛있습니다.","", storeId);
+        spicyChicken = new SpicyChicken(spicyChickenId, "양념황금올리브", 18000, Category.CHICKEN,  "정말 맛있습니다22.", "", storeId);
         var mysqlConfig = aMysqldConfig(v8_0_11)
                 .withCharset(UTF8)
                 .withPort(2215)
@@ -87,7 +97,7 @@ class JdbcFoodRepositoryTest {
                 .build();
 
         embeddedMysql = anEmbeddedMysql(mysqlConfig)
-                .addSchema("test-jdbc-foods", classPathScript("foodSchema.sql"))
+                .addSchema("test-jdbc-foods", classPathScript("testSchema.sql"))
                 .start();
 
     }

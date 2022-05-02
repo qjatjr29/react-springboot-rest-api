@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -20,8 +21,8 @@ public class JdbcFoodRepository implements FoodRepository{
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcFoodRepository.class);
 
-    private static final String INSERT_SQL = "INSERT INTO foods(food_id, name, price, category, type, description, image) VALUES (UUID_TO_BIN(:foodId), :name, :price, :category, :type, :description, :image)";
-    private static final String UPDATE_BY_ID_SQL = "UPDATE foods SET name = :name, price = :price, type = :type, description = :description WHERE food_id = UUID_TO_BIN(:foodId)";
+    private static final String INSERT_SQL = "INSERT INTO foods(food_id, name, price, category, sub_category, description, image, store_id) VALUES (UUID_TO_BIN(:foodId), :name, :price, :category, :subCategory, :description, :image, UUID_TO_BIN(:storeId))";
+    private static final String UPDATE_BY_ID_SQL = "UPDATE foods SET name = :name, price = :price, sub_category = :subCategory, description = :description WHERE food_id = UUID_TO_BIN(:foodId)";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM foods WHERE food_id = UUID_TO_BIN(:foodId)";
     private static final String SELECT_ALL_SQL = "SELECT * FROM foods";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM foods WHERE food_id = UUID_TO_BIN(:foodId)";
@@ -33,12 +34,13 @@ public class JdbcFoodRepository implements FoodRepository{
         String name = resultSet.getString("name");
         int price = resultSet.getInt("price");
         String category = resultSet.getString("category");
-        String type = resultSet.getString("type");
+        String subCategory = resultSet.getString("sub_category");
         String description = resultSet.getString("description");
         String image = resultSet.getString("image");
+        UUID storeId = Utils.toUUID(resultSet.getBytes("store_id"));
 
         Category categoryType = Category.getCategoryType(category);
-        return categoryType.updateFood(foodId, type, name, price, categoryType, description, image);
+        return categoryType.updateFood(foodId, subCategory, name, price, categoryType, description, image, storeId);
     };
 
     private final NamedParameterJdbcTemplate jdbcTemplate;

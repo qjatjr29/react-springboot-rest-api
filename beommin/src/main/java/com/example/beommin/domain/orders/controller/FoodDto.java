@@ -1,7 +1,5 @@
 package com.example.beommin.domain.orders.controller;
 
-import com.example.beommin.domain.orders.entity.food.Category;
-
 import java.util.UUID;
 
 public class FoodDto {
@@ -11,32 +9,39 @@ public class FoodDto {
     private Integer price;
     private String category;
     private String description;
-    private String type;
+    private String subCategory;
     private String image;
+    private UUID storeId;
 
     public FoodDto(){}
 
-    public FoodDto(UUID foodId, String name, Integer price, String category, String description, String image) {
+    public FoodDto(UUID foodId, String name, Integer price, String category, String description, String image, UUID storeId) {
         this.foodId = foodId;
         this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
         this.image = image;
+        this.storeId = storeId;
     }
 
-    public FoodDto(UUID foodId, String name, Integer price, String category, String description, String type, String image) {
+    public FoodDto(UUID foodId, String name, Integer price, String category, String description, String subCategory, String image, UUID storeId) {
         this.foodId = foodId;
         this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
-        this.type = type;
+        this.subCategory = subCategory;
         this.image = image;
+        this.storeId = storeId;
     }
 
-    public String getType() {
-        return type;
+    public UUID getStoreId() {
+        return storeId;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
     }
 
     public UUID getFoodId() {

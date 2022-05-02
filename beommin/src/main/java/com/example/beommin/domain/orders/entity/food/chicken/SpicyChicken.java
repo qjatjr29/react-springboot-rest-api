@@ -16,14 +16,16 @@ public class SpicyChicken implements Food {
     private Category category;
     private String description;
     private String image;
+    private UUID storeId;
 
-    public SpicyChicken(UUID foodId, String name, Integer price, Category category, String description, String image) {
+    public SpicyChicken(UUID foodId, String name, Integer price, Category category, String description, String image, UUID storeId) {
         this.foodId = foodId;
         this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
         this.image = image;
+        this.storeId = storeId;
     }
 
 
@@ -36,19 +38,19 @@ public class SpicyChicken implements Food {
 
     @Override
     public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, category.getType(), description, "양념", image);
+        return new FoodDto(foodId, name, price, category.getType(), description, "양념", image, storeId);
     }
-
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> hashMap = new HashMap<>() {{
             put("foodId", foodId.toString().getBytes());
             put("name", name);
             put("category", category.getType());
-            put("type", "양념");
+            put("subCategory", "양념");
             put("price", price);
             put("description", description);
             put("image", image);
+            put("storeId", storeId.toString().getBytes());
         }};
         return hashMap;
     }

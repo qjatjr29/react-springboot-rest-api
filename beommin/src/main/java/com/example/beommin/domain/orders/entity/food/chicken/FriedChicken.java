@@ -16,14 +16,16 @@ public class FriedChicken implements Food {
     private Category category;
     private String description;
     private String image;
+    private UUID storeId;
 
-    public FriedChicken(UUID foodId, String name, Integer price, Category category, String description, String image) {
+    public FriedChicken(UUID foodId, String name, Integer price, Category category, String description, String image, UUID storeId) {
         this.foodId = foodId;
         this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
         this.image = image;
+        this.storeId = storeId;
     }
 
 
@@ -36,7 +38,7 @@ public class FriedChicken implements Food {
 
     @Override
     public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, category.getType(), description, "후라이드",image);
+        return new FoodDto(foodId, name, price, category.getType(), description, "후라이드", image, storeId);
     }
 
     @Override
@@ -45,10 +47,11 @@ public class FriedChicken implements Food {
             put("foodId", foodId.toString().getBytes());
             put("name", name);
             put("category", category.getType());
-            put("type", "후라이드");
+            put("subCategory", "후라이드");
             put("price", price);
             put("description", description);
             put("image", image);
+            put("storeId", storeId.toString().getBytes());
         }};
         return hashMap;
     }

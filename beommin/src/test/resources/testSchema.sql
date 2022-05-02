@@ -6,7 +6,7 @@ CREATE TABLE stores
     phone_number VARCHAR(50)  NOT NULL,
     image        VARCHAR(500) DEFAULT NULL,
     category     VARCHAR(50)  NOT NULL,
-    created_at      datetime(6) DEFAULT CURRENT_TIMESTAMP(6)
+    created_at      datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
 );
 
 CREATE TABLE foods

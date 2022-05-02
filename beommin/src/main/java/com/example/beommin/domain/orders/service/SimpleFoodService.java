@@ -33,12 +33,13 @@ public class SimpleFoodService implements FoodService{
     public Food createFood(FoodDto foodDto) {
         Category categoryType = Category.getCategoryType(foodDto.getCategory());
         Food food = categoryType.createFood(
-                foodDto.getType(),
+                foodDto.getSubCategory(),
                 foodDto.getName(),
                 foodDto.getPrice(),
                 categoryType,
                 foodDto.getDescription(),
-                foodDto.getImage());
+                foodDto.getImage(),
+                foodDto.getStoreId());
         return foodRepository.insert(food);
     }
 
