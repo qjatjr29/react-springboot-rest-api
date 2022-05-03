@@ -13,20 +13,42 @@ public class FriedChicken implements Food {
     private final UUID foodId;
     private String name;
     private Integer price;
-    private Category category;
+//    private Category category;
+//    private String subCategory;
     private String description;
     private String image;
     private UUID storeId;
 
-    public FriedChicken(UUID foodId, String name, Integer price, Category category, String description, String image, UUID storeId) {
+    public FriedChicken(UUID foodId, String name, Integer price, String description, String image, UUID storeId) {
         this.foodId = foodId;
         this.name = name;
         this.price = price;
-        this.category = category;
+//        this.category = category;
         this.description = description;
         this.image = image;
         this.storeId = storeId;
     }
+
+//    public FriedChicken(UUID foodId, String name, Integer price, Category category, String description, String image, UUID storeId) {
+//        this.foodId = foodId;
+//        this.name = name;
+//        this.price = price;
+//        this.category = category;
+//        this.description = description;
+//        this.image = image;
+//        this.storeId = storeId;
+//    }
+
+//    public FriedChicken(UUID foodId, String name, Integer price, Category category, String subCategory, String description, String image, UUID storeId) {
+//        this.foodId = foodId;
+//        this.name = name;
+//        this.price = price;
+//        this.category = category;
+//        this.subCategory = subCategory;
+//        this.description = description;
+//        this.image = image;
+//        this.storeId = storeId;
+//    }
 
 
     @Override
@@ -38,7 +60,7 @@ public class FriedChicken implements Food {
 
     @Override
     public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, category.getType(), description, "후라이드", image, storeId);
+        return new FoodDto(foodId, name, price, "치킨", description, "후라이드", image, storeId);
     }
 
     @Override
@@ -46,7 +68,7 @@ public class FriedChicken implements Food {
         Map<String, Object> hashMap = new HashMap<>() {{
             put("foodId", foodId.toString().getBytes());
             put("name", name);
-            put("category", category.getType());
+            put("category", "치킨");
             put("subCategory", "후라이드");
             put("price", price);
             put("description", description);

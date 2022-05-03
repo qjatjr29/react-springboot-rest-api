@@ -17,10 +17,10 @@ public interface FoodService {
 
     Food getFoodById(UUID foodId);
 
+    List<Food> getFoodByStore(UUID storeId);
+
     Food updateFood(FoodDto foodDto);
 
     void deleteFood(UUID foodId);
-
-//    Food createFood(String name, String category, int price, String description);
 
 }

@@ -24,10 +24,8 @@ public class FoodController {
     @GetMapping("/all")
     public ResponseEntity getAllFoods() {
         List<Food> foods = foodService.getAllFoods();
-        List<FoodDto> foodDtos = new ArrayList<>();
-        foods.forEach(food -> foodDtos.add(food.toDto()));
         return ResponseEntity.ok()
-                .body(foodDtos);
+                .body(getFoodDtos(foods));
     }
 
     @GetMapping("/{foodId}")
@@ -37,6 +35,12 @@ public class FoodController {
                 .body(food.toDto());
     }
 
+    @GetMapping("/store/{storeId}")
+    public ResponseEntity getFoodByStore(@PathVariable UUID storeId) {
+        List<Food> foods = foodService.getFoodByStore(storeId);
+        return ResponseEntity.ok()
+                .body(getFoodDtos(foods));
+    }
 
     @PostMapping("")
     public ResponseEntity insertFood(@RequestBody FoodDto foodDto) {
@@ -57,5 +61,11 @@ public class FoodController {
         return ResponseEntity.noContent().build();
     }
 
+
+    private List<FoodDto> getFoodDtos(List<Food> foods) {
+        List<FoodDto> foodDtos = new ArrayList<>();
+        foods.forEach(food -> foodDtos.add(food.toDto()));
+        return foodDtos;
+    }
 }
 

@@ -36,7 +36,6 @@ public class SimpleFoodService implements FoodService{
                 foodDto.getSubCategory(),
                 foodDto.getName(),
                 foodDto.getPrice(),
-                categoryType,
                 foodDto.getDescription(),
                 foodDto.getImage(),
                 foodDto.getStoreId());
@@ -47,6 +46,11 @@ public class SimpleFoodService implements FoodService{
     public Food getFoodById(UUID foodId) {
         return foodRepository.findById(foodId)
                 .orElseThrow(() -> new RuntimeException());
+    }
+
+    @Override
+    public List<Food> getFoodByStore(UUID storeId) {
+        return foodRepository.findByStore(storeId);
     }
 
     @Override

@@ -24,10 +24,11 @@ public class JdbcFoodRepository implements FoodRepository{
     private static final String INSERT_SQL = "INSERT INTO foods(food_id, name, price, category, sub_category, description, image, store_id) VALUES (UUID_TO_BIN(:foodId), :name, :price, :category, :subCategory, :description, :image, UUID_TO_BIN(:storeId))";
     private static final String UPDATE_BY_ID_SQL = "UPDATE foods SET name = :name, price = :price, sub_category = :subCategory, description = :description WHERE food_id = UUID_TO_BIN(:foodId)";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM foods WHERE food_id = UUID_TO_BIN(:foodId)";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM foods";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM foods ORDER BY price";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM foods WHERE food_id = UUID_TO_BIN(:foodId)";
     private static final String SELECT_BY_NAME_SQL = "SELECT * FROM foods WHERE name = :name";
-    private static final String SELECT_BY_CATEGORY_SQL = "SELECT * FROM foods WHERE category = :category";
+    private static final String SELECT_BY_STORE_SQL = "SELECT * FROM foods WHERE store_id = UUID_TO_BIN(:storeId) ORDER BY price";
+    private static final String SELECT_BY_CATEGORY_SQL = "SELECT * FROM foods WHERE category = :category ORDER BY price";
 
     private final RowMapper<Food> foodRowMapper = (resultSet, i) -> {
         UUID foodId = Utils.toUUID(resultSet.getBytes("food_id"));
@@ -40,7 +41,7 @@ public class JdbcFoodRepository implements FoodRepository{
         UUID storeId = Utils.toUUID(resultSet.getBytes("store_id"));
 
         Category categoryType = Category.getCategoryType(category);
-        return categoryType.updateFood(foodId, subCategory, name, price, categoryType, description, image, storeId);
+        return categoryType.selectFood(foodId, subCategory, name, price, category, description, image, storeId);
     };
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -81,6 +82,11 @@ public class JdbcFoodRepository implements FoodRepository{
     @Override
     public List<Food> findByCategory(Category category) {
         return jdbcTemplate.query(SELECT_BY_CATEGORY_SQL, Collections.singletonMap("category", category.getType()), foodRowMapper);
+    }
+
+    @Override
+    public List<Food> findByStore(UUID storeId) {
+        return jdbcTemplate.query(SELECT_BY_STORE_SQL, Collections.singletonMap("storeId", storeId.toString().getBytes()), foodRowMapper);
     }
 
     @Override
