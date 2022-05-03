@@ -23,4 +23,5 @@ public interface FoodRepository {
 
     Food deleteById(Food food);
 
+    List<Food> findByStore(UUID storeId);
 }
