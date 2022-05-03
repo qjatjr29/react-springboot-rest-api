@@ -87,8 +87,8 @@ class JdbcFoodRepositoryTest {
     @BeforeEach
     void setup() {
         chickenStore = new ChickenStore(storeId, "범비큐", "서울시 강남", "010-000-0000", StoreCategory.CHICKEN, "", LocalDate.now());
-        friedChicken = new FriedChicken(friedChickenId, "황금올리브", 17000, Category.CHICKEN, "정말 맛있습니다.","", storeId);
-        spicyChicken = new SpicyChicken(spicyChickenId, "양념황금올리브", 18000, Category.CHICKEN,  "정말 맛있습니다22.", "", storeId);
+        friedChicken = new FriedChicken(friedChickenId, "황금올리브", 17000, "정말 맛있습니다.","", storeId);
+        spicyChicken = new SpicyChicken(spicyChickenId, "양념황금올리브", 18000,  "정말 맛있습니다22.", "", storeId);
         var mysqlConfig = aMysqldConfig(v8_0_11)
                 .withCharset(UTF8)
                 .withPort(2215)
@@ -99,7 +99,7 @@ class JdbcFoodRepositoryTest {
         embeddedMysql = anEmbeddedMysql(mysqlConfig)
                 .addSchema("test-jdbc-foods", classPathScript("testSchema.sql"))
                 .start();
-
+        storeRepository.insert(chickenStore);
     }
 
     @AfterEach
@@ -187,5 +187,17 @@ class JdbcFoodRepositoryTest {
         foods = foodRepository.findAll();
         assertThat(foods, hasSize(1));
         assertThat(foods.get(0), samePropertyValuesAs(spicyChicken));
+    }
+
+    @Test
+    @DisplayName("가게별 음식 조회")
+    void testFindByStore() {
+        foodRepository.insert(friedChicken);
+//        FriedChicken test = new FriedChicken(UUID.randomUUID(), "치킨", 15000, Category.CHICKEN,"맛나다", "", UUID.randomUUID());
+//        foodRepository.insert(test);
+        List<Food> foods = foodRepository.findByStore(storeId);
+        assertThat(foods.isEmpty(), is(false));
+        assertThat(foods, hasSize(1));
+        assertThat(foods.get(0) , samePropertyValuesAs(friedChicken));
     }
 }

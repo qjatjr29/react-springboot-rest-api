@@ -27,11 +27,11 @@ class ChickenTypeTest {
     @Test
     void testCreate() {
         chickenType = ChickenType.getChickenType("후라이드");
-        Food chicken = chickenType.createFood("황금올리브", 17000, Category.CHICKEN, "정말 맛있어요!", "", UUID.randomUUID());
+        Food chicken = chickenType.createFood(UUID.randomUUID(),"황금올리브", 17000, "정말 맛있어요!", "", UUID.randomUUID());
         assertThat(chicken.getClass().equals(FriedChicken.class), is(true));
 
         chickenType = ChickenType.getChickenType("양념");
-        chicken = chickenType.createFood("황금올리브양념", 18000, Category.CHICKEN, "정말 맛있어요22!", "", UUID.randomUUID());
+        chicken = chickenType.createFood(UUID.randomUUID(), "황금올리브양념", 18000, "정말 맛있어요22!", "", UUID.randomUUID());
         assertThat(chicken.getClass().equals(SpicyChicken.class), is(true));
 
     }
