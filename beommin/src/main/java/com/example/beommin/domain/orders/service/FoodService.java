@@ -11,9 +11,9 @@ public interface FoodService {
 
     List<Food> getFoodByCategory(Category category);
 
-    List<Food> getAllFoods();
+    List<FoodDto> getAllFoods();
 
-    Food createFood(FoodDto foodDto);
+    FoodDto createFood(FoodDto foodDto);
 
     Food getFoodById(UUID foodId);
 

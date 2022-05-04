@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SimpleFoodService implements FoodService{
@@ -25,12 +26,15 @@ public class SimpleFoodService implements FoodService{
     }
 
     @Override
-    public List<Food> getAllFoods() {
-        return foodRepository.findAll();
+    public List<FoodDto> getAllFoods() {
+        return foodRepository.findAll()
+                .stream()
+                .map(Food::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Food createFood(FoodDto foodDto) {
+    public FoodDto createFood(FoodDto foodDto) {
         Category categoryType = Category.getCategoryType(foodDto.getCategory());
         Food food = categoryType.createFood(
                 foodDto.getSubCategory(),
@@ -39,7 +43,7 @@ public class SimpleFoodService implements FoodService{
                 foodDto.getDescription(),
                 foodDto.getImage(),
                 foodDto.getStoreId());
-        return foodRepository.insert(food);
+        return foodRepository.insert(food).toDto();
     }
 
     @Override
@@ -70,6 +74,5 @@ public class SimpleFoodService implements FoodService{
         Optional<Food> food = foodRepository.findById(foodId);
         food.ifPresent(foodRepository::deleteById);
     }
-
 
 }

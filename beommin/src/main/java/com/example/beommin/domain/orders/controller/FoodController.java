@@ -23,9 +23,9 @@ public class FoodController {
 
     @GetMapping("/all")
     public ResponseEntity getAllFoods() {
-        List<Food> foods = foodService.getAllFoods();
+//        List<Food> foods = foodService.getAllFoods();
         return ResponseEntity.ok()
-                .body(getFoodDtos(foods));
+                .body(foodService.getAllFoods());
     }
 
     @GetMapping("/{foodId}")
@@ -44,9 +44,9 @@ public class FoodController {
 
     @PostMapping("")
     public ResponseEntity insertFood(@RequestBody FoodDto foodDto) {
-        Food food = foodService.createFood(foodDto);
+//        Food food = foodService.createFood(foodDto);
         return ResponseEntity.created(URI.create("/foods"))
-                .body(food.toDto());
+                .body(foodService.createFood(foodDto));
     }
 
     @PutMapping("")
