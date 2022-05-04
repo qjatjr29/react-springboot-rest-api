@@ -10,6 +10,7 @@ import com.example.beommin.domain.orders.repository.FoodRepository;
 import com.example.beommin.domain.orders.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,18 +23,17 @@ public class StoreService {
         this.storeRepository = storeRepository;
     }
 
-//    @Override
-    public List<Store> getStoreByCategory(StoreCategory category) {
-        return storeRepository.findByCategory(category);
+    public List<StoreDto> getStoreByCategory(String category) {
+        List<Store> stores = storeRepository.findByCategory(StoreCategory.getCategoryType(category));
+        List<StoreDto> storeDtoList = new ArrayList<>();
+        stores.forEach(s -> storeDtoList.add(s.toDto()));
+        return storeDtoList;
     }
 
-//    @Override
     public List<Store> getAllStores() {
         return storeRepository.findAll();
     }
 
-    //TODO  restapi 만들면 해야함
-//    @Override
     public Store createStore(StoreDto storeDto) {
         StoreCategory category = StoreCategory.getCategoryType(storeDto.getCategory());
         Store store = category.createStore(
@@ -47,14 +47,11 @@ public class StoreService {
         return storeRepository.insert(store);
     }
 
-//    @Override
     public Store getStoreById(UUID storeId) {
         return storeRepository.findById(storeId)
                 .orElseThrow(() -> new RuntimeException());
     }
 
-    //TODO  restapi 만들면 해야함
-//    @Override
     public Store updateStore(StoreDto storeDto) {
         Optional<Store> store = storeRepository.findById(storeDto.getStoreId());
         if(store.isEmpty()) throw new RuntimeException();
@@ -66,7 +63,6 @@ public class StoreService {
         return storeRepository.update(store.get());
     }
 
-//    @Override
     public void deleteStore(UUID storeId) {
         Optional<Store> store = storeRepository.findById(storeId);
         store.ifPresent(storeRepository::deleteById);

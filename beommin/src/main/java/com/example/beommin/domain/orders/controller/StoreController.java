@@ -39,6 +39,13 @@ public class StoreController {
                 .body(store.toDto());
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity getStoreByCategory(@PathVariable String category) {
+        System.out.println(category);
+       return ResponseEntity.ok()
+               .body(storeService.getStoreByCategory(category));
+    }
+
 
     @PostMapping("")
     public ResponseEntity insertStore(@RequestBody StoreDto storeDto) {
