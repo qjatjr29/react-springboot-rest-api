@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.beommin.Utils.validEmail;
 import static com.example.beommin.Utils.validPassword;
 
 @Service
@@ -35,10 +36,14 @@ public class UserService {
 
     public Optional<UserDto> createUser(UserDto userDto) {
 
-        Optional<User> isExistUser = userRepository.findByEmail(userDto.getEmail());
+        if(validateEmailAndPassword(userDto.getEmail(), userDto.getPassword())) return Optional.empty();
 
-        if(isExistUser.isEmpty() &&validPassword(userDto.getPassword())) {
-            User user = new User(
+        Optional<User> isExistUser = userRepository.findByEmail(userDto.getEmail());
+        if(isExistUser.isPresent()) {
+            logger.info("유저 생성 실패!");
+            return Optional.empty();
+        }
+        User user = new User(
                     UUID.randomUUID(),
                     userDto.getEmail(),
                     userDto.getPassword(),
@@ -47,12 +52,10 @@ public class UserService {
                     userDto.getPhoneNumber(),
                     LocalDate.now()
             );
-            userRepository.insert(user);
-            logger.info("유저 생성!");
-            return Optional.of(UserDto.of(user));
-        }
-        logger.info("유저 생성 실패!");
-        return Optional.empty();
+        userRepository.insert(user);
+        logger.info("유저 생성!");
+        return Optional.of(UserDto.of(user));
+
     }
 
     public UserDto getUserById(UUID userId) {
@@ -89,6 +92,11 @@ public class UserService {
         User getUser = Optional.of(user).get()
                 .orElseThrow(RuntimeException::new);
         return UserDto.of(getUser);
+    }
+
+    private boolean validateEmailAndPassword(String email, String password) {
+        if(!validEmail(email) || !validPassword(password)) return false;
+        return true;
     }
 
 }
