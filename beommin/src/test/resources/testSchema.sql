@@ -20,3 +20,47 @@ CREATE TABLE foods
     store_id     BINARY(16)   NOT NULL,
     CONSTRAINT fk_food_store FOREIGN KEY (store_id) REFERENCES stores (store_id) on DELETE CASCADE
 );
+
+
+CREATE TABLE orders
+(
+    order_id    binary(16)   PRIMARY KEY,
+    name       VARCHAR(50)  NOT NULL,
+    address     VARCHAR(200) NOT NULL,
+    phone_number    VARCHAR(200) NOT NULL,
+    order_status VARCHAR(50)  NOT NULL,
+    price       bigint      NOT NULL,
+    created_at  datetime(6)  NOT NULL,
+    updated_at  datetime(6)  DEFAULT NULL
+);
+
+CREATE TABLE order_list
+(
+    order_list_id    binary(16)   PRIMARY KEY,
+    name       VARCHAR(50)  NOT NULL,
+    address     VARCHAR(200) NOT NULL,
+    phone_number    VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE order_items
+(
+    seq        bigint       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    order_id   binary(16)   NOT NULL,
+    food_id binary(16)   NOT NULL,
+    category   VARCHAR(50)  NOT NULL,
+    price      bigint       NOT NULL,
+    quantity   int          NOT NULL,
+    INDEX (order_id),
+    CONSTRAINT fk_order_items_to_food FOREIGN KEY (food_id) REFERENCES foods (food_id)
+);
+
+CREATE TABLE users
+(
+    user_id   binary(16)   NOT NULL,
+    email   VARCHAR(50)  NOT NULL,
+    password   VARCHAR(50)  NOT NULL,
+    name       VARCHAR(50)  NOT NULL,
+    address    VARCHAR(100)  NOT NULL,
+    phone_number  VARCHAR(100)  NOT NULL,
+    created_at  datetime(6)  NOT NULL
+);
