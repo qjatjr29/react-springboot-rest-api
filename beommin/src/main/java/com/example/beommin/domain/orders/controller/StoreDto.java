@@ -1,9 +1,14 @@
 package com.example.beommin.domain.orders.controller;
 
+import com.example.beommin.domain.orders.entity.Order;
+import com.example.beommin.domain.orders.entity.store.Store;
 import com.example.beommin.domain.orders.entity.store.StoreCategory;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.example.beommin.Utils.createModelMapper;
 
 public class StoreDto {
     private UUID storeId;
@@ -13,6 +18,8 @@ public class StoreDto {
     private String category;
     private String image;
     private LocalDate createdAt;
+
+    private static final ModelMapper modelMapper = createModelMapper();
 
     public StoreDto() {
     }
@@ -25,6 +32,10 @@ public class StoreDto {
         this.category = category;
         this.image = image;
         this.createdAt = createdAt;
+    }
+
+    public static StoreDto of (Store store) {
+        return modelMapper.map(store, StoreDto.class);
     }
 
     public LocalDate getCreatedAt() {

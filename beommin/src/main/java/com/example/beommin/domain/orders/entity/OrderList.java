@@ -47,20 +47,4 @@ public class OrderList {
         return hashMap;
     }
 
-    public UUID getOrderListId() {
-        return orderListId;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public OrderDto toDto() {
-        return new OrderDto(
-                orderListId,
-                name,
-                phoneNumber,
-                address
-        );
-    }
 }

@@ -1,5 +1,7 @@
 package com.example.beommin;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,4 +43,14 @@ public class Utils {
         }
         return true;
     }
+
+    public static ModelMapper createModelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+        return modelMapper;
+    }
+
+
 }

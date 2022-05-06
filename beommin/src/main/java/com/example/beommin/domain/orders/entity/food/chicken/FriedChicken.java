@@ -3,6 +3,7 @@ package com.example.beommin.domain.orders.entity.food.chicken;
 import com.example.beommin.domain.orders.controller.FoodDto;
 import com.example.beommin.domain.orders.entity.food.Category;
 import com.example.beommin.domain.orders.entity.food.Food;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,9 @@ public class FriedChicken implements Food {
     private final UUID foodId;
     private String name;
     private Integer price;
+    private String category;
     private String description;
+    private String subCategory;
     private String image;
     private UUID storeId;
 
@@ -24,6 +27,8 @@ public class FriedChicken implements Food {
         this.description = description;
         this.image = image;
         this.storeId = storeId;
+        category = Category.CHICKEN.getType();
+        subCategory = ChickenType.FRIED.getType();
     }
 
 
@@ -32,11 +37,6 @@ public class FriedChicken implements Food {
         this.name = name;
         this.price = price;
         this.description = description;
-    }
-
-    @Override
-    public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, "치킨", description, "후라이드", image, storeId);
     }
 
     @Override
@@ -53,4 +53,5 @@ public class FriedChicken implements Food {
         }};
         return hashMap;
     }
+
 }

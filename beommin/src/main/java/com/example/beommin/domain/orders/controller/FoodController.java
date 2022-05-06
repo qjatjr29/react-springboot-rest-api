@@ -17,6 +17,7 @@ public class FoodController {
 
     private final FoodService foodService;
 
+
     public FoodController(FoodService foodService) {
         this.foodService = foodService;
     }
@@ -31,8 +32,9 @@ public class FoodController {
     @GetMapping("/{foodId}")
     public ResponseEntity getFoodById(@PathVariable UUID foodId) {
         Food food = foodService.getFoodById(foodId);
+        FoodDto foodDto = new FoodDto();
         return ResponseEntity.ok()
-                .body(food.toDto());
+                .body(foodDto.of(food));
     }
 
     @GetMapping("/store/{storeId}")
@@ -52,7 +54,7 @@ public class FoodController {
     @PutMapping("")
     public ResponseEntity updateFood(@RequestBody FoodDto foodDto) {
         Food food = foodService.updateFood(foodDto);
-        return ResponseEntity.ok(food.toDto());
+        return ResponseEntity.ok(foodDto.of(food));
     }
 
     @DeleteMapping("{foodId}")
@@ -64,7 +66,7 @@ public class FoodController {
 
     private List<FoodDto> getFoodDtos(List<Food> foods) {
         List<FoodDto> foodDtos = new ArrayList<>();
-        foods.forEach(food -> foodDtos.add(food.toDto()));
+        foods.forEach(food -> foodDtos.add(FoodDto.of(food)));
         return foodDtos;
     }
 }

@@ -3,16 +3,20 @@ package com.example.beommin.domain.orders.entity.food.chicken;
 import com.example.beommin.domain.orders.controller.FoodDto;
 import com.example.beommin.domain.orders.entity.food.Category;
 import com.example.beommin.domain.orders.entity.food.Food;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Getter
 public class SpicyChicken implements Food {
 
     private final UUID foodId;
     private String name;
     private Integer price;
+    private String category;
+    private String subCategory;
     private String description;
     private String image;
     private UUID storeId;
@@ -24,6 +28,8 @@ public class SpicyChicken implements Food {
         this.description = description;
         this.image = image;
         this.storeId = storeId;
+        category = Category.CHICKEN.getType();
+        subCategory = ChickenType.SPICY.getType();
     }
 
 
@@ -34,10 +40,6 @@ public class SpicyChicken implements Food {
         this.description = description;
     }
 
-    @Override
-    public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, "치킨", description, "양념", image, storeId);
-    }
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> hashMap = new HashMap<>() {{

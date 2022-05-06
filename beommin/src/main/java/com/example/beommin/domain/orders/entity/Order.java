@@ -69,15 +69,4 @@ public class Order {
         return orderId;
     }
 
-    public OrderDto toDto() {
-        return new OrderDto(
-                orderId,
-                name,
-                phoneNumber,
-                address,
-                price,
-                orderItems.stream().map(OrderItem::toDto).collect(Collectors.toList()),
-                orderStatus
-        );
-    }
 }

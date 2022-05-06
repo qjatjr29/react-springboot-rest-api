@@ -13,7 +13,9 @@ public class HalfChicken implements Food {
     private final UUID foodId;
     private String name;
     private Integer price;
+    private String category;
     private String description;
+    private String subCategory;
     private String image;
     private UUID storeId;
 
@@ -24,6 +26,8 @@ public class HalfChicken implements Food {
         this.description = description;
         this.image = image;
         this.storeId = storeId;
+        category = Category.CHICKEN.getType();
+        subCategory = ChickenType.FRIED.getType();
     }
 
 
@@ -32,11 +36,6 @@ public class HalfChicken implements Food {
         this.name = name;
         this.price = price;
         this.description = description;
-    }
-
-    @Override
-    public FoodDto toDto() {
-        return new FoodDto(foodId, name, price, "치킨", description, "반반", image, storeId);
     }
 
     @Override

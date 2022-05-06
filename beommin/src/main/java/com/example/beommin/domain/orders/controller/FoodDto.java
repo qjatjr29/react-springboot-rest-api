@@ -1,7 +1,18 @@
 package com.example.beommin.domain.orders.controller;
 
+import com.example.beommin.domain.orders.entity.food.Food;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.UUID;
 
+import static com.example.beommin.Utils.createModelMapper;
+
+//@Builder
 public class FoodDto {
 
     private UUID foodId;
@@ -12,6 +23,9 @@ public class FoodDto {
     private String subCategory;
     private String image;
     private UUID storeId;
+
+    private static final ModelMapper modelMapper = createModelMapper();
+
 
     public FoodDto(){}
 
@@ -34,6 +48,10 @@ public class FoodDto {
         this.subCategory = subCategory;
         this.image = image;
         this.storeId = storeId;
+    }
+
+    public static FoodDto of (Food food) {
+        return modelMapper.map(food, FoodDto.class);
     }
 
     public UUID getStoreId() {

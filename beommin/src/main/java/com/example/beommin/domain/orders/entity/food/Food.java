@@ -9,7 +9,5 @@ public interface Food {
 
     void changeInfo(String name, int price, String description);
 
-    FoodDto toDto();
-
     Map<String,Object> toMap();
 }

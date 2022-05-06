@@ -29,7 +29,7 @@ public class SimpleFoodService implements FoodService{
     public List<FoodDto> getAllFoods() {
         return foodRepository.findAll()
                 .stream()
-                .map(Food::toDto)
+                .map(FoodDto::of)
                 .collect(Collectors.toList());
     }
 
@@ -43,13 +43,14 @@ public class SimpleFoodService implements FoodService{
                 foodDto.getDescription(),
                 foodDto.getImage(),
                 foodDto.getStoreId());
-        return foodRepository.insert(food).toDto();
+        foodRepository.insert(food);
+        return FoodDto.of(food);
     }
 
     @Override
     public Food getFoodById(UUID foodId) {
         return foodRepository.findById(foodId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
     }
 
     @Override
@@ -60,13 +61,9 @@ public class SimpleFoodService implements FoodService{
     @Override
     public Food updateFood(FoodDto foodDto) {
         Optional<Food> food = foodRepository.findById(foodDto.getFoodId());
-        if(food.isEmpty()) throw new RuntimeException();
-        food.get().changeInfo(
-                foodDto.getName(),
-                foodDto.getPrice(),
-                foodDto.getDescription()
-        );
-        return foodRepository.update(food.get());
+        Food update = Optional.of(food).get()
+                .orElseThrow(RuntimeException::new);
+        return foodRepository.update(update);
     }
 
     @Override

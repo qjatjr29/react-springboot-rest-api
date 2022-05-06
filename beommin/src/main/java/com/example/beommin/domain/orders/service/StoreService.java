@@ -24,17 +24,22 @@ public class StoreService {
     }
 
     public List<StoreDto> getStoreByCategory(String category) {
-        List<Store> stores = storeRepository.findByCategory(StoreCategory.getCategoryType(category));
+        List<Store> stores = storeRepository
+                .findByCategory(StoreCategory.getCategoryType(category));
+
         List<StoreDto> storeDtoList = new ArrayList<>();
-        stores.forEach(s -> storeDtoList.add(s.toDto()));
+        stores.forEach(s -> storeDtoList.add(StoreDto.of(s)));
         return storeDtoList;
     }
 
-    public List<Store> getAllStores() {
-        return storeRepository.findAll();
+    public List<StoreDto> getAllStores() {
+        List<StoreDto> storeDtoList = new ArrayList<>();
+        storeRepository.findAll()
+                .forEach(store -> storeDtoList.add(StoreDto.of(store)));
+        return storeDtoList;
     }
 
-    public Store createStore(StoreDto storeDto) {
+    public StoreDto createStore(StoreDto storeDto) {
         StoreCategory category = StoreCategory.getCategoryType(storeDto.getCategory());
         Store store = category.createStore(
                 storeDto.getStoreId(),
@@ -44,28 +49,33 @@ public class StoreService {
                 category,
                 storeDto.getImage(),
                 storeDto.getCreatedAt());
-        return storeRepository.insert(store);
+        storeRepository.insert(store);
+        return storeDto;
     }
 
-    public Store getStoreById(UUID storeId) {
-        return storeRepository.findById(storeId)
-                .orElseThrow(() -> new RuntimeException());
+    public StoreDto getStoreById(UUID storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(RuntimeException::new);
+        return StoreDto.of(store);
     }
 
-    public Store updateStore(StoreDto storeDto) {
+    public StoreDto updateStore(StoreDto storeDto) {
         Optional<Store> store = storeRepository.findById(storeDto.getStoreId());
-        if(store.isEmpty()) throw new RuntimeException();
-        store.get().changeInfo(
+        Store updateStore = Optional.of(store).get()
+                .orElseThrow(RuntimeException::new);
+        updateStore.changeInfo(
                 storeDto.getName(),
                 storeDto.getAddress(),
                 storeDto.getPhoneNumber()
         );
-        return storeRepository.update(store.get());
+        storeRepository.update(updateStore);
+        return storeDto;
     }
 
     public void deleteStore(UUID storeId) {
-        Optional<Store> store = storeRepository.findById(storeId);
-        store.ifPresent(storeRepository::deleteById);
+        Store store = Optional.of(storeRepository.findById(storeId)).get()
+                        .orElseThrow(()->new RuntimeException());
+        storeRepository.deleteById(store);
     }
 
 

@@ -49,7 +49,4 @@ public class OrderItem {
         return hashMap;
     }
 
-    public OrderItemDto toDto() {
-        return new OrderItemDto(foodId, category.getType(), price, quantity);
-    }
 }

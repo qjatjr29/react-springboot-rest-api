@@ -45,6 +45,12 @@ public class User {
         return hashMap;
     }
 
+    public void changeInfo(String name, String address, String phoneNumber) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneFormat(phoneNumber);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -58,15 +64,4 @@ public class User {
                 '}';
     }
 
-    public UserDto toDto() {
-        return new UserDto(
-                userId,
-                email,
-                password,
-                name,
-                address,
-                phoneNumber,
-                createdAt
-        );
-    }
 }

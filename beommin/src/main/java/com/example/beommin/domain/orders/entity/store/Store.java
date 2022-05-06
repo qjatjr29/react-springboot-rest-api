@@ -13,5 +13,4 @@ public interface Store {
 
     void changeInfo(String name, String address, String phoneNumber);
 
-    StoreDto toDto();
 }

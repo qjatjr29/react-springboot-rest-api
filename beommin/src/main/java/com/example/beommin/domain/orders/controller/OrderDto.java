@@ -1,12 +1,18 @@
 package com.example.beommin.domain.orders.controller;
 
+import com.example.beommin.domain.orders.entity.Order;
 import com.example.beommin.domain.orders.entity.OrderItem;
+import com.example.beommin.domain.orders.entity.OrderList;
 import com.example.beommin.domain.orders.entity.OrderStatus;
+import com.example.beommin.domain.orders.entity.food.Food;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.example.beommin.Utils.createModelMapper;
 
 public class OrderDto {
     private UUID id;
@@ -16,6 +22,8 @@ public class OrderDto {
     private Integer price;
     private OrderStatus orderStatus;
     private List<OrderItemDto> orderItems;
+
+    private static final ModelMapper modelMapper = createModelMapper();
 
     public OrderDto() {
     }
@@ -42,7 +50,14 @@ public class OrderDto {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.orderItems = orderItems;
-//        this.orderItems = orderItems;
+    }
+
+    public static OrderDto of (Order order) {
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+    public static OrderDto ofList (OrderList order) {
+        return modelMapper.map(order, OrderDto.class);
     }
 
     public void setOrderItems(List<OrderItemDto> orderItems) {

@@ -24,40 +24,33 @@ public class StoreController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity getAllStores() {
-        List<Store> stores = storeService.getAllStores();
-        List<StoreDto> foodDtos = new ArrayList<>();
-        stores.forEach(food -> foodDtos.add(food.toDto()));
+    public ResponseEntity<List<StoreDto>> getAllStores() {
         return ResponseEntity.ok()
-                .body(foodDtos);
+                .body(storeService.getAllStores());
     }
 
     @GetMapping("/{storeId}")
-    public ResponseEntity getStoreById(@PathVariable UUID storeId) {
-        Store store = storeService.getStoreById(storeId);
+    public ResponseEntity<StoreDto> getStoreById(@PathVariable UUID storeId) {
         return ResponseEntity.ok()
-                .body(store.toDto());
+                .body(storeService.getStoreById(storeId));
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity getStoreByCategory(@PathVariable String category) {
-        System.out.println(category);
+    public ResponseEntity<List<StoreDto>> getStoreByCategory(@PathVariable String category) {
        return ResponseEntity.ok()
                .body(storeService.getStoreByCategory(category));
     }
 
 
     @PostMapping("")
-    public ResponseEntity insertStore(@RequestBody StoreDto storeDto) {
-        Store store = storeService.createStore(storeDto);
+    public ResponseEntity<StoreDto> insertStore(@RequestBody StoreDto storeDto) {
         return ResponseEntity.created(URI.create("/stores"))
-                .body(store.toDto());
+                .body(storeService.createStore(storeDto));
     }
 
     @PutMapping("")
-    public ResponseEntity updateStore(@RequestBody StoreDto storeDto) {
-        Store store = storeService.updateStore(storeDto);
-        return ResponseEntity.ok(store.toDto());
+    public ResponseEntity<StoreDto> updateStore(@RequestBody StoreDto storeDto) {
+        return ResponseEntity.ok(storeService.updateStore(storeDto));
     }
 
     @DeleteMapping("/{storeId}")

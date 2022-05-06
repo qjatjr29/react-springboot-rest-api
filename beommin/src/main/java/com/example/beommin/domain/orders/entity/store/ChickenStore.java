@@ -61,11 +61,6 @@ public class ChickenStore implements Store{
     }
 
     @Override
-    public StoreDto toDto() {
-        return new StoreDto(storeId, name, address, phoneNumber, category.getType(), image, createdAt);
-    }
-
-    @Override
     public String toString() {
         return "ChickenStore{" +
                 "storeId=" + storeId +

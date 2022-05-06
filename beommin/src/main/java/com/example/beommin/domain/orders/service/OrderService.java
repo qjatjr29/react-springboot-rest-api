@@ -73,34 +73,34 @@ public class OrderService {
     }
 
     // TODO - 장바구니에서 바로 주문
-    public void changeOrderListToOrder(OrderList orderList) {
-        UUID orderId = UUID.randomUUID();
-
-        OrderDto od = orderList.toDto();
-        UUID preId = od.getId();
-
-        List<OrderItem> items = orderItemRepository.findByOrderId(preId);
-        int price = 0;
-        for (OrderItem item : items) {
-            price += item.toDto().getPrice();
-            orderItemRepository.deleteById(item, preId);
-        }
-
-        Order order = Order.builder()
-                .orderId(orderId)
-                .name(od.getName())
-                .address(od.getAddress())
-                .phoneNumber(od.getPhoneNumber())
-                .price(price)
-                .orderStatus(OrderStatus.ACCEPTED)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-        orderRepository.insert(order);
-
-        Optional<OrderList> deleteOrderList = orderListRepository.findByOrderListId(preId);
-        deleteOrderList.ifPresent(orderListRepository::deleteOrderList);
-    }
+//    public void changeOrderListToOrder(OrderList orderList) {
+//        UUID orderId = UUID.randomUUID();
+//
+//        OrderDto od = orderList.toDto();
+//        UUID preId = od.getId();
+//
+//        List<OrderItem> items = orderItemRepository.findByOrderId(preId);
+//        int price = 0;
+//        for (OrderItem item : items) {
+//            price += OrderItemDto.of(item).getPrice();
+//            orderItemRepository.deleteById(item, preId);
+//        }
+//
+//        Order order = Order.builder()
+//                .orderId(orderId)
+//                .name(od.getName())
+//                .address(od.getAddress())
+//                .phoneNumber(od.getPhoneNumber())
+//                .price(price)
+//                .orderStatus(OrderStatus.ACCEPTED)
+//                .createdAt(LocalDateTime.now())
+//                .updatedAt(LocalDateTime.now())
+//                .build();
+//        orderRepository.insert(order);
+//
+//        Optional<OrderList> deleteOrderList = orderListRepository.findByOrderListId(preId);
+//        deleteOrderList.ifPresent(orderListRepository::deleteOrderList);
+//    }
 
 
 
@@ -108,7 +108,7 @@ public class OrderService {
         List<Order> orderList = orderRepository.findAll();
 
         return orderList.stream()
-                .map(Order::toDto).collect(Collectors.toList());
+                .map(OrderDto::of).collect(Collectors.toList());
     }
 
     public List<OrderDto> getOrderLists() {
@@ -117,13 +117,12 @@ public class OrderService {
 
         for (OrderList list : orderList) {
             List<OrderItemDto> orderItemDtoList = new ArrayList<>();
-            OrderDto orderDto = list.toDto();
+            OrderDto orderDto = OrderDto.ofList(list);
             List<OrderItem> byOrderId = orderItemRepository.findByOrderId(orderDto.getId());
 
             for (OrderItem orderItem : byOrderId) {
-                orderItemDtoList.add(orderItem.toDto());
+                orderItemDtoList.add(OrderItemDto.of(orderItem));
             }
-
             orderDto.setOrderItems(orderItemDtoList);
             orderDtoList.add(orderDto);
         }
@@ -133,42 +132,38 @@ public class OrderService {
 
     public OrderDto getOrder(UUID orderId) {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) return order.get().toDto();
-        else throw new RuntimeException();
+        Order getOrder = Optional.of(order).get()
+                .orElseThrow(RuntimeException::new);
+        return OrderDto.of(getOrder);
     }
 
     public OrderDto getOrderList(UUID orderId) {
         Optional<OrderList> order = orderListRepository.findByOrderListId(orderId);
-        if(order.isPresent()) return order.get().toDto();
-        else throw new RuntimeException();
+        OrderList orderList = Optional.of(order).get()
+                .orElseThrow(RuntimeException::new);
+        return OrderDto.ofList(orderList);
     }
 
     public List<OrderItemDto> getOrderItemsList(UUID orderId) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
         List<OrderItemDto> orderItemDtoList = new ArrayList<>();
-        orderItems.forEach(o -> orderItemDtoList.add(o.toDto()));
+        orderItems.forEach(o -> orderItemDtoList.add(OrderItemDto.of(o)));
         return orderItemDtoList;
     }
 
 
     public void deleteOrder(UUID deleteId) {
         Optional<Order> deleteOrder = orderRepository.findById(deleteId);
-        if(deleteOrder.isEmpty()) throw new RuntimeException();
-        else {
-            Order order = deleteOrder.get();
-            deleteOrderItem(order.getOrderId());
-            orderRepository.deleteById(deleteOrder.get());
-        }
+        Order delete = Optional.of(deleteOrder).get()
+                .orElseThrow(RuntimeException::new);
+        orderRepository.deleteById(delete);
     }
 
     public void deleteOrderList(UUID deleteId) {
         Optional<OrderList> deleteOrder = orderListRepository.findByOrderListId(deleteId);
-        if(deleteOrder.isEmpty()) throw new RuntimeException();
-        else {
-            OrderList orderList = deleteOrder.get();
-            deleteOrderItem(orderList.getOrderListId());
-            orderListRepository.deleteOrderList(deleteOrder.get());
-        }
+        OrderList delete = Optional.of(deleteOrder).get()
+                .orElseThrow(RuntimeException::new);
+        orderListRepository.deleteOrderList(delete);
     }
 
     private List<OrderItem> getOrderItems(OrderDto orderDto, UUID orderId) {
