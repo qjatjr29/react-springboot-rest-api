@@ -1,6 +1,7 @@
 package com.example.beommin.domain.orders.entity.food;
 
 import com.example.beommin.domain.orders.entity.food.chicken.ChickenType;
+import com.example.beommin.domain.orders.entity.food.pizza.PizzaType;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -22,12 +23,15 @@ public enum Category {
     PIZZA("피자") {
         @Override
         public Food createFood(String subType, String name, int price, String description, String image, UUID storeId) {
-            return null;
+            PizzaType pizzaType = PizzaType.getPizzaType(subType);
+            return pizzaType.createFood(null, name, price, description, image, storeId);
         }
 
         @Override
         public Food selectFood(UUID id, String subType, String name, int price, String category, String description, String image, UUID storeId) {
-            return null;
+            PizzaType pizzaType = PizzaType.getPizzaType(subType);
+            return pizzaType.createFood(id, name, price, description, image, storeId);
+
         }
     },
     RICE("밥") {
