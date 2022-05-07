@@ -63,5 +63,12 @@ public class Utils {
         return modelMapper;
     }
 
+    public static boolean validateEmailAndPassword(String email, String password) {
+        System.out.println(email);
+        System.out.println(password);
+        if(validEmail(email) && validPassword(password)) return true;
+        return false;
+    }
+
 
 }
