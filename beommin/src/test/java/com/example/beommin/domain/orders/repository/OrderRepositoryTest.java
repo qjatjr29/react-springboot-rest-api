@@ -179,7 +179,6 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("정보 수정 테스트")
     void testUpdate() {
-        storeRepository.insert(store1);
         logger.info("before => {}",store1 );
         store1.changeInfo("범범큐", "서울시 강남구", "0298765432");
         logger.info("update => {}",store1 );
@@ -187,7 +186,7 @@ class OrderRepositoryTest {
 
         List<Store> stores = storeRepository.findAll();
         assertThat(stores.isEmpty(), is(false));
-        assertThat(stores, hasSize(1));
+        assertThat(stores, hasSize(2));
 
         Optional<Store> store = storeRepository.findById(storeId1);
         assertThat(store.isEmpty(), is(false));
@@ -197,8 +196,6 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("삭제 테스트")
     void testDelete() {
-        storeRepository.insert(store1);
-        storeRepository.insert(store2);
         List<Store> stores = storeRepository.findAll();
         assertThat(stores, hasSize(2));
 

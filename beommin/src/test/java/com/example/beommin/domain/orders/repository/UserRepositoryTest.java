@@ -1,9 +1,6 @@
 package com.example.beommin.domain.orders.repository;
 
-import com.example.beommin.domain.orders.entity.User;
-import com.example.beommin.domain.orders.entity.store.ChickenStore;
-import com.example.beommin.domain.orders.entity.store.Store;
-import com.example.beommin.domain.orders.entity.store.StoreCategory;
+import com.example.beommin.domain.orders.entity.user.User;
 import com.wix.mysql.EmbeddedMysql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +14,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -35,7 +31,6 @@ import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
 import static com.wix.mysql.distribution.Version.v8_0_11;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringJUnitConfig
 @ActiveProfiles("test")
