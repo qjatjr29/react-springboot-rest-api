@@ -1,9 +1,7 @@
 package com.example.beommin.domain.orders.repository;
 
 import com.example.beommin.Utils;
-import com.example.beommin.domain.orders.entity.User;
-import com.example.beommin.domain.orders.entity.food.Category;
-import com.example.beommin.domain.orders.entity.food.Food;
+import com.example.beommin.domain.orders.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +15,7 @@ import java.util.*;
 
 @Repository
 @Profile({"dev", "test", "default"})
-public class UserRepository {
+public class UserRepository{
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
     private static final String INSERT_SQL = "INSERT INTO users(user_id, email, password, name, address, phone_number, created_at) VALUES (UUID_TO_BIN(:userId), :email, :password, :name, :address, :phoneNumber, :createdAt)";

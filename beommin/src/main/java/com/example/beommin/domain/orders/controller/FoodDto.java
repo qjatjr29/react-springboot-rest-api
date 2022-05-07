@@ -85,4 +85,18 @@ public class FoodDto {
     public String getImage() {
         return image;
     }
+
+    @Override
+    public String toString() {
+        return "FoodDto{" +
+                "foodId=" + foodId +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", subCategory='" + subCategory + '\'' +
+                ", image='" + image + '\'' +
+                ", storeId=" + storeId +
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.beommin.domain.orders.service;
 
-import com.example.beommin.domain.orders.controller.user.UserDto;
-import com.example.beommin.domain.orders.entity.User;
+import com.example.beommin.domain.orders.controller.user.PersonDto;
+import com.example.beommin.domain.orders.entity.user.User;
 import com.example.beommin.domain.orders.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.example.beommin.Utils.validEmail;
-import static com.example.beommin.Utils.validPassword;
+import static com.example.beommin.Utils.*;
 
 @Service
 public class UserService {
@@ -27,38 +26,37 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserDto> getAllUsers() {
+    public List<PersonDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDto> userDtoList = new ArrayList<>();
-        users.forEach(user -> userDtoList.add(UserDto.of(user)));
-        return userDtoList;
+        List<PersonDto> personDtoList = new ArrayList<>();
+        users.forEach(user -> personDtoList.add(PersonDto.of(user)));
+        return personDtoList;
     }
 
-    public Optional<UserDto> createUser(UserDto userDto) {
+    public Optional<PersonDto> createUser(PersonDto personDto) {
 
-        if(validateEmailAndPassword(userDto.getEmail(), userDto.getPassword())) return Optional.empty();
-
-        Optional<User> isExistUser = userRepository.findByEmail(userDto.getEmail());
+        if(!validateEmailAndPassword(personDto.getEmail(), personDto.getPassword())) return Optional.empty();
+        Optional<User> isExistUser = userRepository.findByEmail(personDto.getEmail());
         if(isExistUser.isPresent()) {
             logger.info("유저 생성 실패!");
             return Optional.empty();
         }
         User user = new User(
                     UUID.randomUUID(),
-                    userDto.getEmail(),
-                    userDto.getPassword(),
-                    userDto.getName(),
-                    userDto.getAddress(),
-                    userDto.getPhoneNumber(),
+                    personDto.getEmail(),
+                    personDto.getPassword(),
+                    personDto.getName(),
+                    personDto.getAddress(),
+                    personDto.getPhoneNumber(),
                     LocalDate.now()
             );
         userRepository.insert(user);
         logger.info("유저 생성!");
-        return Optional.of(UserDto.of(user));
+        return Optional.of(PersonDto.of(user));
 
     }
 
-    public UserDto getUserById(UUID userId) {
+    public PersonDto getUserById(UUID userId) {
         Optional<User> user = userRepository.findByUserId(userId);
         return getUserDto(user);
     }
@@ -68,17 +66,17 @@ public class UserService {
         return getUserDto(login).getUserId();
     }
 
-    public UserDto updateUser(UserDto userDto) {
-        Optional<User> user = userRepository.findByUserId(userDto.getUserId());
+    public PersonDto updateUser(PersonDto personDto) {
+        Optional<User> user = userRepository.findByUserId(personDto.getUserId());
         User updateUser = Optional.of(user).get()
                 .orElseThrow(RuntimeException::new);
         updateUser.changeInfo(
-                userDto.getName(),
-                userDto.getAddress(),
-                userDto.getPhoneNumber()
+                personDto.getName(),
+                personDto.getAddress(),
+                personDto.getPhoneNumber()
         );
         userRepository.update(updateUser);
-        return userDto;
+        return personDto;
     }
 
     public void deleteUser(UUID userId) {
@@ -88,15 +86,12 @@ public class UserService {
     }
 
 
-    private UserDto getUserDto(Optional<User> user) {
+    private PersonDto getUserDto(Optional<User> user) {
         User getUser = Optional.of(user).get()
                 .orElseThrow(RuntimeException::new);
-        return UserDto.of(getUser);
+        return PersonDto.of(getUser);
     }
 
-    private boolean validateEmailAndPassword(String email, String password) {
-        if(!validEmail(email) || !validPassword(password)) return false;
-        return true;
-    }
+
 
 }

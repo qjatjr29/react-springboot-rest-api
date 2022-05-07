@@ -1,15 +1,10 @@
 package com.example.beommin.domain.orders.controller.user;
 
-import com.example.beommin.domain.orders.controller.FoodDto;
-import com.example.beommin.domain.orders.entity.User;
-import com.example.beommin.domain.orders.entity.food.Food;
 import com.example.beommin.domain.orders.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,19 +40,19 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity createUser(@RequestBody UserDto userDto) {
-        Optional<UserDto> user = userService.createUser(userDto);
-        if(user.isPresent()) return ResponseEntity
+    public ResponseEntity createUser(@RequestBody PersonDto personDto) {
+        Optional<PersonDto> user = userService.createUser(personDto);
+        if(user.isEmpty()) return ResponseEntity
                 .created(URI.create("/users"))
-                .body(userDto);
+                .body(personDto);
         return ResponseEntity.badRequest().body("이미 있는 아이디 입니다.");
     }
 
     @PutMapping("")
-    public ResponseEntity updateUser(@RequestBody UserDto userDto) {
-        userService.updateUser(userDto);
+    public ResponseEntity updateUser(@RequestBody PersonDto personDto) {
+        userService.updateUser(personDto);
         return ResponseEntity.ok()
-                .body(userDto);
+                .body(personDto);
     }
 
     @DeleteMapping("{userId}")
