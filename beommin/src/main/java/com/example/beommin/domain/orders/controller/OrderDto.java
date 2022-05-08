@@ -15,7 +15,8 @@ import java.util.UUID;
 import static com.example.beommin.Utils.createModelMapper;
 
 public class OrderDto {
-    private UUID id;
+    private UUID orderId;
+    private UUID userId;
     private String name;
     private String phoneNumber;
     private String address;
@@ -28,8 +29,9 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(UUID id, String name, String phoneNumber, String address, Integer price, List<OrderItemDto> orderItems, OrderStatus orderStatus) {
-        this.id = id;
+    public OrderDto(UUID orderId, UUID userId, String name, String phoneNumber, String address, Integer price, List<OrderItemDto> orderItems, OrderStatus orderStatus) {
+        this.orderId = orderId;
+        this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -38,14 +40,22 @@ public class OrderDto {
         this.orderStatus = orderStatus;
     }
 
-    public OrderDto(UUID id, String name, String phoneNumber, String address) {
-        this.id = id;
+    public OrderDto(UUID orderId, String name, String phoneNumber, String address) {
+        this.orderId = orderId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
     public OrderDto(String name, String phoneNumber, String address, List<OrderItemDto> orderItems) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.orderItems = orderItems;
+    }
+
+    public OrderDto(UUID userId, String name, String phoneNumber, String address, List<OrderItemDto> orderItems) {
+        this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -68,19 +78,12 @@ public class OrderDto {
         return orderStatus;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getOrderId() {
+        return orderId;
     }
 
-    @Override
-    public String toString() {
-        return "OrderDto{" +
-                "name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", price=" + price +
-                ", orderItems=" + orderItems +
-                '}';
+    public UUID getUserId() {
+        return userId;
     }
 
     public Integer getPrice() {
@@ -102,4 +105,19 @@ public class OrderDto {
     public List<OrderItemDto> getOrderItems() {
         return orderItems;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "id=" + orderId +
+                ", userId=" + userId +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", orderStatus=" + orderStatus +
+                ", orderItems=" + orderItems +
+                '}';
+    }
+
 }

@@ -25,6 +25,7 @@ CREATE TABLE foods
 CREATE TABLE orders
 (
     order_id    binary(16)   PRIMARY KEY,
+    user_id     binary(16)   NOT NULL,
     name       VARCHAR(50)  NOT NULL,
     address     VARCHAR(200) NOT NULL,
     phone_number    VARCHAR(200) NOT NULL,

@@ -11,6 +11,7 @@ import com.example.beommin.domain.orders.repository.OrderItemRepository;
 import com.example.beommin.domain.orders.repository.OrderListRepository;
 import com.example.beommin.domain.orders.repository.OrderRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class OrderService {
 
         Order order = Order.builder()
                 .orderId(orderId)
+                .userId(orderDto.getUserId())
                 .name(orderDto.getName())
                 .address(orderDto.getAddress())
                 .phoneNumber(orderDto.getPhoneNumber())
@@ -118,7 +120,7 @@ public class OrderService {
         for (OrderList list : orderList) {
             List<OrderItemDto> orderItemDtoList = new ArrayList<>();
             OrderDto orderDto = OrderDto.ofList(list);
-            List<OrderItem> byOrderId = orderItemRepository.findByOrderId(orderDto.getId());
+            List<OrderItem> byOrderId = orderItemRepository.findByOrderId(orderDto.getOrderId());
 
             for (OrderItem orderItem : byOrderId) {
                 orderItemDtoList.add(OrderItemDto.of(orderItem));
@@ -137,12 +139,23 @@ public class OrderService {
         return OrderDto.of(getOrder);
     }
 
+    public List<OrderDto> getOrderListByUser(UUID userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        orders.forEach(order -> {
+            orderDtoList.add(OrderDto.of(order));
+            System.out.println(OrderDto.of(order).toString());
+        });
+        return orderDtoList;
+    }
+
     public OrderDto getOrderList(UUID orderId) {
         Optional<OrderList> order = orderListRepository.findByOrderListId(orderId);
         OrderList orderList = Optional.of(order).get()
                 .orElseThrow(RuntimeException::new);
         return OrderDto.ofList(orderList);
     }
+
 
     public List<OrderItemDto> getOrderItemsList(UUID orderId) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);

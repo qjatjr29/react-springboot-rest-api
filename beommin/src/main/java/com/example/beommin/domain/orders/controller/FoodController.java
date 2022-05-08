@@ -24,7 +24,6 @@ public class FoodController {
 
     @GetMapping("/all")
     public ResponseEntity getAllFoods() {
-//        List<Food> foods = foodService.getAllFoods();
         return ResponseEntity.ok()
                 .body(foodService.getAllFoods());
     }

@@ -22,15 +22,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-
-//    @PostMapping("")
-//    public ResponseEntity createOrder(@RequestBody OrderDto orderDto) {
-//        System.out.println("hihi");
-//        System.out.println(orderDto.toString());
-//        Order order = orderService.createOrder(orderDto);
-//        return ResponseEntity.created(URI.create("/orders"))
-//                .body(order.toMap().get("name"));
-//    }
     @PostMapping("")
     public ResponseEntity createOrder(@RequestBody OrderDto orderDto) {
         orderService.createOrder(orderDto);
@@ -64,6 +55,12 @@ public class OrderController {
     public ResponseEntity<OrderDto> findOrderList(@PathVariable UUID orderId) {
         return ResponseEntity.ok()
                 .body(orderService.getOrderList(orderId));
+    }
+
+    @GetMapping("/list/orders/{userId}")
+    public ResponseEntity<List<OrderDto>> findUserOrderList(@PathVariable UUID userId) {
+        return ResponseEntity.ok()
+                .body(orderService.getOrderListByUser(userId));
     }
 
     @GetMapping("/orderItems/{orderId}")

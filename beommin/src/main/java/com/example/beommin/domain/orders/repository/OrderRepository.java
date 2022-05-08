@@ -18,15 +18,16 @@ import java.util.*;
 @Repository
 public class OrderRepository {
     private static final Logger logger = LoggerFactory.getLogger(JdbcFoodRepository.class);
-    private static final String INSERT_SQL = "INSERT INTO orders(order_id, name, address, phone_number, order_status, price, created_at, updated_at) VALUES (UUID_TO_BIN(:orderId), :name, :address, :phoneNumber, :orderStatus, :price, :createdAt, :updatedAt)";
+    private static final String INSERT_SQL = "INSERT INTO orders(order_id, user_id,  name, address, phone_number, order_status, price, created_at, updated_at) VALUES (UUID_TO_BIN(:orderId), UUID_TO_BIN(:userId), :name, :address, :phoneNumber, :orderStatus, :price, :createdAt, :updatedAt)";
     private static final String UPDATE_BY_ID_SQL = "UPDATE orders SET name = :name, address = :address, phone_number = :phoneNumber, order_status = :orderStatus, updated_at = :updatedAt WHERE order_id = UUID_TO_BIN(:orderID)";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String SELECT_ALL_SQL = "SELECT * FROM orders ORDER BY created_at DESC";
+    private static final String SELECT_BY_USER_ID_SQL = "SELECT * FROM orders WHERE user_id = UUID_TO_BIN(:userId) ORDER BY created_at DESC";
     private static final String SELECT_BY_ORDER_ID_SQL = "SELECT * FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
-//    private static final String SELECT_BY_CUSTOMER_SQL = "SELECT * FROM orderItems WHERE customer_id = :customerId";
 
     private final RowMapper<Order> orderMapper = (resultSet, i) -> {
         UUID orderId = Utils.toUUID(resultSet.getBytes("order_id"));
+        UUID userId = Utils.toUUID(resultSet.getBytes("user_id"));
         String name = resultSet.getString("name");
         String phoneNumber = resultSet.getString("phone_number");
         String address = resultSet.getString("address");
@@ -35,7 +36,7 @@ public class OrderRepository {
         LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
         LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
 
-        return new Order(orderId, name, phoneNumber, address, price, orderStatus,createdAt, updatedAt);
+        return new Order(orderId, userId, name, phoneNumber, address, price, orderStatus,createdAt, updatedAt);
     };
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -63,6 +64,10 @@ public class OrderRepository {
             logger.info("해당 데이터가 없습니다.");
             return Optional.empty();
         }
+    }
+
+    public List<Order> findByUserId(UUID userId) {
+        return jdbcTemplate.query(SELECT_BY_USER_ID_SQL, Collections.singletonMap("userId", userId.toString().getBytes()), orderMapper);
     }
 
     public Order update(Order order) {

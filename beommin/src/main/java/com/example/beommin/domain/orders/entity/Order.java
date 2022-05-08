@@ -14,6 +14,7 @@ import static com.example.beommin.Utils.phoneFormat;
 @Builder
 public class Order {
     private final UUID orderId;
+    private final UUID userId;
     private String name;
     private String phoneNumber;
     private String address;
@@ -23,8 +24,9 @@ public class Order {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Order(UUID orderId, String name, String phoneNumber, String address, List<OrderItem> orderItems, Integer price, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Order(UUID orderId, UUID userId, String name, String phoneNumber, String address, List<OrderItem> orderItems, Integer price, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.orderId = orderId;
+        this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -35,8 +37,9 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
-    public Order(UUID orderId, String name, String phoneNumber, String address, Integer price, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Order(UUID orderId, UUID userId, String name, String phoneNumber, String address, Integer price, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.orderId = orderId;
+        this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -50,6 +53,7 @@ public class Order {
     public Map<String, Object> toMap() {
         Map<String, Object> hashMap = new HashMap<>() {{
             put("orderId", orderId.toString().getBytes());
+            put("userId", userId.toString().getBytes());
             put("name", name);
             put("address", address);
             put("phoneNumber", phoneNumber);
@@ -61,12 +65,12 @@ public class Order {
         return hashMap;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
+//    public List<OrderItem> getOrderItems() {
+//        return orderItems;
+//    }
 
-    public UUID getOrderId() {
-        return orderId;
-    }
+//    public UUID getOrderId() {
+//        return orderId;
+//    }
 
 }

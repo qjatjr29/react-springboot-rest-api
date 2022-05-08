@@ -67,6 +67,7 @@ public class UserService {
     }
 
     public PersonDto updateUser(PersonDto personDto) {
+        System.out.println(personDto.toString());
         Optional<User> user = userRepository.findByUserId(personDto.getUserId());
         User updateUser = Optional.of(user).get()
                 .orElseThrow(RuntimeException::new);
