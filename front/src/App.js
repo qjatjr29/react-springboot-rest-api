@@ -3,6 +3,7 @@ import ThemeProvider from './theme';
 import './App.css';
 import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
+import 'bootstrap/dist/css/bootstrap.css';
 import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';
 import Router from './components/Router';
 import DashboardLayout from './layouts/dashboard/index'
