@@ -9,12 +9,14 @@ import com.example.beommin.domain.orders.entity.food.chicken.FriedChicken;
 import com.example.beommin.domain.orders.entity.store.ChickenStore;
 import com.example.beommin.domain.orders.entity.store.Store;
 import com.example.beommin.domain.orders.entity.store.StoreCategory;
+import com.example.beommin.domain.orders.entity.user.User;
 import com.wix.mysql.EmbeddedMysql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,13 +92,16 @@ class OrderRepositoryTest {
     Store store1 ,store2;
     FriedChicken chicken;
     OrderItem orderItem;
+    User user;
     static final UUID storeId1 = UUID.randomUUID();
     static final UUID storeId2 = UUID.randomUUID();
+    static final UUID userId = UUID.randomUUID();
     static final UUID foodId = UUID.randomUUID();
     static final UUID orderId = UUID.randomUUID();
 
     @BeforeEach
     void setup() {
+        user = new User(userId, "beomseok@gmail.com" , "password12!", "hi", "서울시 구로구" , "010-4953-2033", LocalDate.now());
         store1 = new ChickenStore(storeId1, "범비큐", "서울시 강남구", "02-1234-5678", StoreCategory.CHICKEN,"", LocalDate.now());
         store2 = new ChickenStore(storeId2, "범촌치킨", "서울시 구로구", "02-1235-5678", StoreCategory.CHICKEN,"", LocalDate.now());
         chicken = new FriedChicken(foodId,"test", 15000, "test", "", storeId1);
@@ -139,8 +144,8 @@ class OrderRepositoryTest {
 
         List<OrderItem> items = new ArrayList<>();
         items.add(orderItem);
-        Order order = new Order(UUID.randomUUID(), "beomsic", "01012345678", "서울 구로구", 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
-        Order order2 = new Order(UUID.randomUUID(), "beomsic", "01012345678", "서울 구로구", items, 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
+        Order order = new Order(UUID.randomUUID(), userId, "beomsic", "01012345678", "서울 구로구", 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
+        Order order2 = new Order(UUID.randomUUID(), userId, "beomsic", "01012345678", "서울 구로구", items, 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
         orderRepository.insert(order);
         orderRepository.insert(order2);
         List<Order> orders = orderRepository.findAll();
@@ -196,12 +201,31 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("삭제 테스트")
     void testDelete() {
-        List<Store> stores = storeRepository.findAll();
-        assertThat(stores, hasSize(2));
+        UUID orderId = UUID.randomUUID();
+        Order order = new Order(orderId, userId, "beomsic", "01012345678", "서울 구로구", 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
 
-        storeRepository.deleteById(store1);
-        stores = storeRepository.findAll();
-        assertThat(stores, hasSize(1));
-        assertThat(stores.get(0), samePropertyValuesAs(store2));
+        orderRepository.insert(order);
+        List<Order> orders = orderRepository.findAll();
+        assertThat(orders, hasSize(1));
+
+        orderRepository.deleteById(order);
+        orders = orderRepository.findAll();
+        assertThat(orders, hasSize(0));
+
+    }
+
+    @Test
+    @DisplayName("유저의 주문 내역 조회 테스트")
+    void testFindByUserId() {
+
+        UUID orderId = UUID.randomUUID();
+        Order order = new Order(orderId, userId, "beomsic", "01012345678", "서울 구로구", 30000, OrderStatus.ACCEPTED, LocalDateTime.now(), LocalDateTime.now());
+
+        orderRepository.insert(order);
+        List<Order> findUserOrders = orderRepository.findByUserId(userId);
+        assertThat(findUserOrders.isEmpty(), is(false));
+        assertThat(findUserOrders, hasSize(1));
+        assertThat(findUserOrders.get(0), samePropertyValuesAs(order));
+
     }
 }
