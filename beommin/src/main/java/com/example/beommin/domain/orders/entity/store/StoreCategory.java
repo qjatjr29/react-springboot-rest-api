@@ -17,31 +17,36 @@ public enum StoreCategory {
     PIZZA("피자") {
         @Override
         public Store createStore(UUID id, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
-            return null;
+            if(id == null) return new PizzaStore(UUID.randomUUID(), name, address, phoneNumber, category, image, LocalDate.now());
+            return new PizzaStore(id, name, address, phoneNumber, category, image, createdAt);
         }
     },
-    RICE("백반/죽") {
+    RICE("밥") {
         @Override
         public Store createStore(UUID id, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
-            return null;
+            if(id == null) return new RiceStore(UUID.randomUUID(), name, address, phoneNumber, category, image, LocalDate.now());
+            return new RiceStore(id, name, address, phoneNumber, category, image, createdAt);
         }
     },
-    NOODLE("국수/면") {
+    NOODLE("면") {
         @Override
         public Store createStore(UUID id, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
-            return null;
+            if(id == null) return new NoodleStore(UUID.randomUUID(), name, address, phoneNumber, category, image, LocalDate.now());
+            return new NoodleStore(id, name, address, phoneNumber, category, image, createdAt);
         }
     },
     HAMBURGER("햄버거") {
         @Override
         public Store createStore(UUID id, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
-            return null;
+            if(id == null) return new HamburgerStore(UUID.randomUUID(), name, address, phoneNumber, category, image, LocalDate.now());
+            return new HamburgerStore(id, name, address, phoneNumber, category, image, createdAt);
         }
     },
     DESSERT("카페") {
         @Override
         public Store createStore(UUID id, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
-            return null;
+            if(id == null) return new DessertStore(UUID.randomUUID(), name, address, phoneNumber, category, image, LocalDate.now());
+            return new DessertStore(id, name, address, phoneNumber, category, image, createdAt);
         }
     };
 

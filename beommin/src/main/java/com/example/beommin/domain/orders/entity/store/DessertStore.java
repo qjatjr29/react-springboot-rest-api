@@ -1,18 +1,13 @@
 package com.example.beommin.domain.orders.entity.store;
 
-import com.example.beommin.domain.orders.controller.StoreDto;
-import com.example.beommin.domain.orders.entity.food.Category;
-import com.example.beommin.domain.orders.entity.food.Food;
-
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static com.example.beommin.Utils.phoneFormat;
 
-public class ChickenStore implements Store{
+public class DessertStore implements Store {
     private final UUID storeId;
     private String name;
     private String address;
@@ -21,7 +16,7 @@ public class ChickenStore implements Store{
     private String image;
     private LocalDate createdAt;
 
-    public ChickenStore(UUID storeId, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
+    public DessertStore(UUID storeId, String name, String address, String phoneNumber, StoreCategory category, String image, LocalDate createdAt) {
         this.storeId = storeId;
         this.name = name;
         this.address = address;
@@ -29,10 +24,6 @@ public class ChickenStore implements Store{
         this.category = category;
         this.image = image;
         this.createdAt = createdAt;
-    }
-
-    public boolean checkPhoneNumber(String phoneNumber) {
-        return phoneNumber.equals(phoneNumber);
     }
 
     @Override
@@ -54,18 +45,5 @@ public class ChickenStore implements Store{
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneFormat(phoneNumber);
-    }
-
-    @Override
-    public String toString() {
-        return "ChickenStore{" +
-                "storeId=" + storeId +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", category=" + category +
-                ", image='" + image + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
     }
 }
